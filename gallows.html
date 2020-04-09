@@ -22,9 +22,10 @@
         }
 
         var remainingLetters = word.length;
+        var guesses = 20;
 
         // игровой цикл
-        while (remainingLetters > 0) {
+        while (remainingLetters > 0 && guesses > 0 ) {
           // показываем состояние игры
           alert(answerArray.join(" "));
           // запрашиваем вариант ответа
@@ -35,11 +36,14 @@
           } else if (guess.length !== 1) {
             alert("Пожалуйста введите только одну букву.");
           } else {
+            guesses--;
+            guess = guess.toLowerCase();
             // обновляем состояние игры
             for (var j = 0; j < word.length; j++) {
-              if (word[j] === guess) {
+              if (word[j] === guess && answerArray[j] === "_") {
                 answerArray[j] = guess;
                 remainingLetters--;
+
               }
             }
           }
@@ -47,7 +51,11 @@
         }
         // отоброжаем ответ и поздравление
         alert(answerArray.join(" "));
-        alert("Поздравляем, было загадано слово " + word);
+        if (guesses > 0) {
+          alert("Поздравляем, было загадано слово " + word);
+        } else{
+          alert("Плохо, было загадано слово " + word);
+        }
     </script>
 </body>
 </html>
