@@ -11,51 +11,69 @@
 
 
     <script>
-        // массив со словами
-        var words = ["программа", "макака", "прекрасный", "оладушек"];
-        // выбираем случайное слово
-        var word = words[Math.floor(Math.random() * words.length)];
-        // итоговый массив
+    function pickWord() {
+      var words = ["программа", "макака", "прекрасный", "оладушек"];
+      return words[Math.floor(Math.random() * words.length)];
+    }
+    function setupAnswerArray(word){
         var answerArray = [];
-        for (var i = 0; i < word.length; i++) {
-          answerArray[i] = "_";
-        }
+         for (var i = 0; i < word.length; i++) {
+          array[i] = "_";
+    }
+    return answerArray;
+  }
+    function showPlayerProgress(answerArray) {
+        return alert(answerArray.join(" "));
+    }
+    function getGuesses() {
+      return prompt("Угадайте букву или нажмите отмена для выхода из игры");
+    }
+     function updateGameState(guess, word, answerArray) {
+     // Обновляет answerArray согласно ответу игрока (guess)
+     // возвращает число, обозначающее, сколько раз буква guess
+     // встречается в слове, чтобы можно было обновить значение
+     // remainingLetters
+     var appearances = 0;
+     for (var j = 0; j < word.length; j++) {
+       if (word[j] === guess) {
+         answerArray[j] = guess;
+         appearances++;
+       }
+     }
 
-        var remainingLetters = word.length;
-        var guesses = 20;
+     return appearances;
+   };
 
-        // игровой цикл
-        while (remainingLetters > 0 && guesses > 0 ) {
-          // показываем состояние игры
-          alert(answerArray.join(" "));
-          // запрашиваем вариант ответа
-          var guess = prompt("Угадайте букву или нажмите отмена для выхода из игры");
-          if (guess === null) {
-            // выходим из игрового цикла
-            break;
-          } else if (guess.length !== 1) {
-            alert("Пожалуйста введите только одну букву.");
-          } else {
-            guesses--;
-            guess = guess.toLowerCase();
-            // обновляем состояние игры
-            for (var j = 0; j < word.length; j++) {
-              if (word[j] === guess && answerArray[j] === "_") {
-                answerArray[j] = guess;
-                remainingLetters--;
+    function showAnswerAndCongratulatePlayer(answerArray) {
+     // С помощью alert показывает игроку отгаданное слово
+     // и поздравляет его с победой
+     showPlayerProgress(answerArray);
+     alert("Отлично! Было загадано слово " + answerArray.join(""));
+   };
 
-              }
-            }
-          }
-          // конец игрового цикла
-        }
-        // отоброжаем ответ и поздравление
-        alert(answerArray.join(" "));
-        if (guesses > 0) {
-          alert("Поздравляем, было загадано слово " + word);
-        } else{
-          alert("Плохо, было загадано слово " + word);
-        }
+   // word: загаданное слово
+ var word = pickWord();
+ // answerArray: итоговый массив
+ var answerArray = setupAnswerArray(word);
+ // remainingLetters: сколько букв осталось угадать
+ var remainingLetters = word.length;
+
+ while (remainingLetters > 0) {
+   showPlayerProgress(answerArray);
+   // guess: ответ игрока
+   var guess = getGuess();
+   if (guess === null) {
+     break;
+   } else if (guess.length !== 1) {
+     alert("Пожалуйста, введите одиночную букву.");
+   } else {
+     // correctGuesses: количество открытых букв
+     var correctGuesses = updateGameState(guess, word, answerArray);
+     remainingLetters -= correctGuesses;
+   }
+ }
+
+ showAnswerAndCongratulatePlayer(answerArray);
     </script>
 </body>
 </html>
